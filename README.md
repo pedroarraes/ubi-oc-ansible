@@ -475,9 +475,9 @@ This tutorial guides you through the process of creating a versatile image for r
 ![image](images/image04.png)
 
 ## References
-1. https://docs.openshift.com/container-platform/4.14/nodes/jobs/nodes-nodes-jobs.html[Running tasks in pods using jobs]
-2. https://docs.ansible.com/[Ansible community documentation]
-
+1. [Running tasks in pods using jobs](https://docs.openshift.com/container-platform/4.14/nodes/jobs/nodes-nodes-jobs.html)
+2. [Ansible community documentation](https://docs.ansible.com/)
+3. [Red Hat Universal Base Image 9](https://catalog.redhat.com/software/containers/ubi9/ubi/615bcf606feffc5384e8452e?architecture=amd64&image=6571494b4a249787e97aa1bf)
 
 
 
