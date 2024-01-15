@@ -12,7 +12,11 @@
 
 * [Building a Custom UBI Image](#Building-a-Custom-UBI-Image)
     *[Create a Containerfile](#Create-a-Containerfile)
+    *[Build the Image](#Build-the-Image)
+    *[Test the Image](#Test-the-Image)
 * [Pushing the Image to quay.io](#Pushing-the-Image-to-quay.io)
+    *[Login to quay.io](#Login-to-quay.io)
+    *[Push the Image](#Push-the-Image)
 * [Creating a Ansible Script in a ConfigMap](#Creating-a-Ansible-Script-in-a-ConfigMap)
 * [Deploying a cronjob](#Deploying-a-cronjob)
 
@@ -83,10 +87,10 @@ ADD ansible.cfg /etc/ansible/ansible.cfg
 Now that you have created the Containerfile, you can build the image using the podman build command.
 
 ```bash
-podman build  --build-arg USERNAME='your_user_name' --build-arg PASSWORD='your_user_password' -t quay.io/username/bi-ansible:latest .
+$ podman build  --build-arg USERNAME='your_user_name' --build-arg PASSWORD='your_user_password' -t quay.io/username/ubi-ansible:latest .
 ```
 ```log
-]STEP 1/9: FROM registry.access.redhat.com/ubi9/ubi:9.3-1476
+STEP 1/9: FROM registry.access.redhat.com/ubi9/ubi:9.3-1476
 Trying to pull registry.access.redhat.com/ubi9/ubi:9.3-1476...
 Getting image source signatures
 Checking if image destination supports signatures
@@ -308,13 +312,57 @@ STEP 9/9: ADD ansible.cfg /etc/ansible/ansible.cfg
 COMMIT quay.io/parraes/bi-ansible:latest
 --> ccfd3a1ffcc4
 [Warning] one or more build args were not consumed: [PASSWORD]
-Successfully tagged quay.io/parraes/bi-ansible:latest
+Successfully tagged quay.io/parraes/ubi-ansible:latest
 ccfd3a1ffcc4227ac67f08fab81181cd1bd58bee37077ee38b617a1c2cdb3ea6
 ```
 
+### Test the Image
+Now that you have created the image, you can test the image using the podman run command.
+
+```bash
+$ podman run -it quay.io/username/ubi-ansible:latest ansible-playbook example.yml
+```
+```log
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [This is a ansible script hello-world] **************************************************************************************************************************************************************************************************
+
+TASK [Hello Ansible] *************************************************************************************************************************************************************************************************************************
+changed: [localhost]
+
+PLAY RECAP ***********************************************************************************************************************************************************************************************************************************
+localhost                  : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
 
 ## Pushing the Image to quay.io
-Explore the process of pushing your customized image to quay.io for seamless accessibility and distribution.
+Explore the process of pushing your customized image to quay.io for seamless accessibility and distribution. You can user any other registry, but you need to change the commands.
+
+### Login to quay.io
+```bash
+$ podman login quay.io -u your_username -p your_password
+```
+```log
+Login Succeeded!
+```
+### Push the Image
+```bash
+$ podman push quay.io/username/ubi-ansible:latest
+```
+```log
+Getting image source signatures
+Copying blob 20d69397e354 skipped: already exists  
+Copying blob 15e504407dcb done   | 
+Copying blob e206db761e93 skipped: already exists  
+Copying blob b4be8eb5308c skipped: already exists  
+Copying config 1efb18183e done   | 
+Writing manifest to image destination
+```
+
+### Turn the Image Public
+To turn the image public, you need to change the image visibility in the quay.io. Access the quay.io and change the image visibility to public, as shown in the following image.
+
+![image](images/image01.png)
+
 
 ## Configuring an Ansible Script within a ConfigMap
 Understand the steps involved in setting up an Ansible script within a ConfigMap, ensuring efficient configuration management.
