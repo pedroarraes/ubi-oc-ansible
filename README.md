@@ -20,10 +20,6 @@
     * [Turn the Image Public](#Turn-the-Image-Public)
 * [Prepraring OpenShift Namespace](#Prepraring-OpenShift-Namespace)
     * [Create a Namespace](#Create-a-Namespace)
-    * [Create a Service Account](#Create-a-Service-Account)
-    * [Create a Custon Role](#Create-a-Custon-Role)
-    * [Add a Role to the Service Account](#Add-a-Role-to-the-Service-Account)
-    * [Create a Secret with the Service Account Token](#Create-a-Secret-with-the-Service-Account-Token)
     * [Create a ConfigMap with the Ansible Script](#Create-a-ConfigMap-with-the-Ansible-Script)
 * [Deploying a cronjob](#Deploying-a-cronjob)
 
@@ -390,20 +386,100 @@ to build a new example application in Ruby. Or use kubectl to deploy a simple Ku
     kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.43 -- /agnhost serve-hostname
 
 ```
-### Create a Service Account
-
-### Create a Custon Role
-
-### Add a Role to the Service Account
-
-### Create a Secret with the Service Account Token
-
 ### Create a ConfigMap with the Ansible Script
-
-Understand the steps involved in setting up an Ansible script within a ConfigMap, ensuring efficient configuration management.
+In this example, we will create a ConfigMap with the ansible script, but you can use any other method to create the ConfigMap.
+```ConfigMap
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: print-time
+data:
+  print-hour.yml: |-
+    - name: Print Container Timestamp
+      hosts: localhost
+      tasks:
+      - name: Show Timestamp
+        shell: date
+```
+```bash
+$ oc apply -f ConfigMap.yml
+```
+```log
+configmap/printtime created
+```
 
 ## Deploying a CronJob
-Discover how to deploy a scheduled job using cron, enabling automated and periodic execution of your configured tasks.
+Now we have all prerequisites, we will deploy a cronjob to run the ansible script every minute. Above, the cronjob yaml file.
+
+```CronJob
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: showtimestamp
+  namespace: my-first-ansible-cronjob
+spec:
+  schedule: '* * * * *'
+  concurrencyPolicy: Allow
+  suspend: false
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          volumes:
+            - name: ansible-playbook
+              configMap:
+                name:  printtime
+                defaultMode: 420
+          containers:
+            - name: printtime
+              image: >-
+                quay.io/parraes/ubi-ansible:latest
+              args:
+                - /bin/sh
+                - '-c'
+                - ansible-playbook playbooks/printhour.yml
+              resources: {}
+              volumeMounts:
+                - name: ansible-playbook
+                  mountPath: /opt/scripts/playbooks
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              imagePullPolicy: Always
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
+```
+```bash
+$ oc apply -f CronJob.yml
+```
+```log
+cronjob.batch/showtimestamp created
+```
+
+## Conclusion
+This tutorial guides you through the process of creating a versatile image for running jobs on OpenShift, utilizing OpenShift-CLI and Ansible. The jobs can execute generic Ansible scripts specified in a ConfigMap.
+
+![image](images/image02.png)
+
+![image](images/image03.png)
+
+![image](images/image04.png)
+
+## References
+1. https://docs.openshift.com/container-platform/4.14/nodes/jobs/nodes-nodes-jobs.html[Running tasks in pods using jobs]
+2. https://docs.ansible.com/[Ansible community documentation]
+
+
+
 
 
 

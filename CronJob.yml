@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: showtimestamp
+  namespace: my-first-ansible-cronjob
+spec:
+  schedule: '* * * * *'
+  concurrencyPolicy: Allow
+  suspend: false
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          volumes:
+            - name: ansible-playbook
+              configMap:
+                name:  printtime
+                defaultMode: 420
+          containers:
+            - name: printtime
+              image: >-
+                quay.io/parraes/ubi-ansible:latest
+              args:
+                - /bin/sh
+                - '-c'
+                - ansible-playbook playbooks/printhour.yml
+              resources: {}
+              volumeMounts:
+                - name: ansible-playbook
+                  mountPath: /opt/scripts/playbooks
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              imagePullPolicy: Always
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1

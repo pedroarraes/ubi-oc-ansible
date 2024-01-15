@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: printtime
+data:
+  printhour.yml: |-
+    - name: Print Container Timestamp
+      hosts: localhost
+      tasks:
+      - name: Show Timestamp
+        shell: date
+        register: result
+      - debug:
+          var: result.stdout_lines
