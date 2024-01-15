@@ -18,7 +18,13 @@
     * [Login to quay.io](#Login-to-quay.io)
     * [Push the Image](#Push-the-Image)
     * [Turn the Image Public](#Turn-the-Image-Public)
-* [Creating a Ansible Script in a ConfigMap](#Creating-a-Ansible-Script-in-a-ConfigMap)
+* [Prepraring OpenShift Namespace](#Prepraring-OpenShift-Namespace)
+    * [Create a Namespace](#Create-a-Namespace)
+    * [Create a Service Account](#Create-a-Service-Account)
+    * [Create a Custon Role](#Create-a-Custon-Role)
+    * [Add a Role to the Service Account](#Add-a-Role-to-the-Service-Account)
+    * [Create a Secret with the Service Account Token](#Create-a-Secret-with-the-Service-Account-Token)
+    * [Create a ConfigMap with the Ansible Script](#Create-a-ConfigMap-with-the-Ansible-Script)
 * [Deploying a cronjob](#Deploying-a-cronjob)
 
 
@@ -365,7 +371,35 @@ To turn the image public, you need to change the image visibility in the quay.io
 ![image](images/image01.png)
 
 
-## Configuring an Ansible Script within a ConfigMap
+## Prepraring OpenShift Namespace
+Now we have the image in the quay.io, we can create the namespace in the OpenShift and deploy the image. In the new namespace, we need to create a service account, a custom role, a role binding, a secret with the service account token and a configmap with the ansible script.
+
+### Create a Namespace
+```bash
+$ oc new-project my-first-ansible-cronjob
+```
+```log
+Now using project "my-first-ansible-cronjob" on server "https://api.cluster-9vkcw.dynamic.redhatworkshops.io:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agnhost:2.43 -- /agnhost serve-hostname
+
+```
+### Create a Service Account
+
+### Create a Custon Role
+
+### Add a Role to the Service Account
+
+### Create a Secret with the Service Account Token
+
+### Create a ConfigMap with the Ansible Script
+
 Understand the steps involved in setting up an Ansible script within a ConfigMap, ensuring efficient configuration management.
 
 ## Deploying a CronJob
