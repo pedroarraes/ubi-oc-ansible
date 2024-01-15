@@ -1,14 +1,16 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.3-1476
+#Base Image
+FROM registry.access.redhat.com/ubi9/ubi:9.3-1476 
 
 #Red Hat Credencials
 ARG USERNAME = default_username && \
     PASSWORD = default_password 
 
+#Environment Variables
 ENV USERNAME=${USERNAME} \
     PASSWORD=${PASSWORD} \
     HOME=/opt/scripts
 
-#UPDATE SECURITY PATCHES
+#Update and Install Packages
 RUN subscription-manager register --username ${USERNAME} --password ${PASSWORD} && \
     subscription-manager repos --enable rhocp-4.13-for-rhel-9-x86_64-rpms && \
     dnf update -y --security --sec-severity=Important --sec-severity=Critical && \
@@ -25,9 +27,13 @@ RUN subscription-manager register --username ${USERNAME} --password ${PASSWORD} 
 
 WORKDIR ${HOME}   
 
+#System Volume to store the playbooks
 VOLUME ${HOME}/playbooks 
 
 USER 1001
 
+#Default Example Command 
 ADD example.yml ${HOME}/example.yml
+
+#Default Ansible Configuration
 ADD ansible.cfg /etc/ansible/ansible.cfg
