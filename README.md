@@ -10,14 +10,18 @@
 
 ## Summary
 
-* Building a Custom UBI Image[#Building-a-Custom-UBI-Image]
-* Pushing the Image to quay.io[#Pushing-the-Image-to-quay.io]
-* Creating a Ansible Script in a ConfigMap[#Creating-a-Ansible-Script-in-a-ConfigMap]
-* Deploying a cronjob[#Deploying-a-cronjob]
+* [Building a Custom UBI Image](#Building-a-Custom-UBI-Image)
+    *[Create a Containerfile](#Create-a-Containerfile)
+* [Pushing the Image to quay.io](#Pushing-the-Image-to-quay.io)
+* [Creating a Ansible Script in a ConfigMap](#Creating-a-Ansible-Script-in-a-ConfigMap)
+* [Deploying a cronjob](#Deploying-a-cronjob)
+    
 
 
 ## Building a Custom UBI Image
 This sesstion will learn how to create a personalized Universal Base Image (UBI) tailored to your requirements. First step is to create a Containerfile to install OpenShift-Cli and Ansible, you need a Red Hat Subscription to download the packages.
+
+### Create a Containerfile
 
 ```Dockefile
 #Base Image (1)
