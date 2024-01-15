@@ -11,13 +11,13 @@
 ## Summary
 
 * [Building a Custom UBI Image](#Building-a-Custom-UBI-Image)
-  *[Create a Containerfile](#Create-a-Containerfile)
-  *[Build the Image](#Build-the-Image)
-  *[Test the Image](#Test-the-Image)
+    * [Create a Containerfile](#Create-a-Containerfile)
+    * [Build the Image](#Build-the-Image)
+    * [Test the Image](#Test-the-Image)
 * [Pushing the Image to quay.io](#Pushing-the-Image-to-quay.io)
-  *[Login to quay.io](#Login-to-quay.io)
-  *[Push the Image](#Push-the-Image)
-  *[Turn the Image Public](#Turn-the-Image-Public)
+    * [Login to quay.io](#Login-to-quay.io)
+    * [Push the Image](#Push-the-Image)
+    * [Turn the Image Public](#Turn-the-Image-Public)
 * [Creating a Ansible Script in a ConfigMap](#Creating-a-Ansible-Script-in-a-ConfigMap)
 * [Deploying a cronjob](#Deploying-a-cronjob)
 
