@@ -15,7 +15,7 @@
 * [Pushing the Image to quay.io](#Pushing-the-Image-to-quay.io)
 * [Creating a Ansible Script in a ConfigMap](#Creating-a-Ansible-Script-in-a-ConfigMap)
 * [Deploying a cronjob](#Deploying-a-cronjob)
-    
+
 
 
 ## Building a Custom UBI Image
@@ -65,7 +65,19 @@ ADD example.yml ${HOME}/example.yml
 ADD ansible.cfg /etc/ansible/ansible.cfg
 ```
 
+(1) The base image is the UBI 9.3, you can use any other base image, but you need to change the package manager and the commands to install the packages.
 
+(2) The Red Hat Credencials are used to download the packages.
+
+(3) The environment variables are used to store the credencials and the home directory.
+
+(4) The packages are installed using the package manager dnf, you can use yum, but you need to change the commands.
+
+(5) The system volume is used to store the playbooks, you can use any other directory, but you need to change Containerfile.
+
+(6) The default command is used to run the example.yml playbook, you can change the command to run any other playbook.
+
+(7) The default ansible.cfg file is used to configure the ansible, you can change the file to configure the ansible.
 
 
 ## Pushing the Image to quay.io
