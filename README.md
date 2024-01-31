@@ -1,5 +1,5 @@
 # How to create a container to run a job in OpenShift using oc and ansible
-"This tutorial guides you through the process of creating a versatile image for running jobs on OpenShift, utilizing OpenShift-CLI and Ansible. The jobs can execute generic Ansible scripts specified in a ConfigMap.
+This tutorial guides you through the process of creating a versatile image for running jobs on OpenShift, utilizing OpenShift-CLI and Ansible. The jobs can execute generic Ansible scripts specified in a ConfigMap.
 
 ## Requeriments
 
